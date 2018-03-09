@@ -5,13 +5,18 @@ import TeamList from './components/TeamList'
 import PlayerDetails from './components/PlayerDetails'
 import NavHeader from './components/Header'
 import 'semantic-ui-css/semantic.min.css';
+import { connect } from 'react-redux'
 
 
 class App extends Component {
-  state = {
-    teams: gamesData.teams,
-    selectedPlayer: null
-  }
+
+  // this was the original state we have now made over to the store in index.js
+  // we can now use connect, imported above, to tell these components about the store in index.js
+
+  // state = {
+  //   teams: gamesData.teams,
+  //   selectedPlayer: null
+  // }
 
   handleSelectPlayer = (player) => {
     this.setState({
@@ -20,15 +25,27 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <div className="App">
         <NavHeader />
-        <TeamList teams={this.state.teams} selectPlayer={this.handleSelectPlayer}/>
-        {!this.state.selectedPlayer ? <div> Click Player for Details </div> :
-          <PlayerDetails selectedPlayer={this.state.selectedPlayer}/>}
+        <TeamList selectPlayer={this.handleSelectPlayer}/>
+        {!this.props.selectedPlayer ? <div> Click Player for Details </div> :
+          <PlayerDetails selectedPlayer={this.props.selectedPlayer}/>}
       </div>
     );
   }
 }
 
-export default App;
+
+
+// keys of the object returned will be the props passed on
+const mapStateToProps = (state) =>{
+  return {
+    selectedPlayer: state.selectedPlayer
+  }
+}
+
+//connect is what allows us to give the information from reducer(which imported games data)=>createStore=>provider=>this app
+
+export default connect(mapStateToProps)(App);

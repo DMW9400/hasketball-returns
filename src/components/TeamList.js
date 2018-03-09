@@ -1,6 +1,9 @@
 import React from 'react'
 import Team from './Team'
+import { connect } from 'react-redux'
 
+
+// the arg params for TeamList are deconstructed - essentiall props.teams, props.selectPlayer
 const TeamList = ({ teams, selectPlayer }) => {
 
   const renderedTeams = teams.map(team => {
@@ -14,4 +17,14 @@ const TeamList = ({ teams, selectPlayer }) => {
   )
 }
 
-export default TeamList
+// keys of the object returned will be the props passed on
+const mapStateToProps = (state) =>{
+  return {
+    teams: state.teams,
+    selectedPlayer: state.selectedPlayer
+  }
+}
+
+//connect is what allows us to give the information from reducer(which imported games data)=>createStore=>provider=>this app
+
+export default connect(mapStateToProps)(TeamList);
